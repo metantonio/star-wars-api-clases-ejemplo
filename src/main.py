@@ -9,6 +9,8 @@ from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
 from models import db, User, Post
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required,get_jwt_identity
 #from models import Person
 
 app = Flask(__name__)
@@ -19,6 +21,10 @@ MIGRATE = Migrate(app, db)
 db.init_app(app)
 CORS(app)
 setup_admin(app)
+bcrypt = Bcrypt(app)
+# Setup the Flask-JWT-Extended extension
+app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
+jwt = JWTManager(app)
 
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
@@ -29,6 +35,28 @@ def handle_invalid_usage(error):
 @app.route('/')
 def sitemap():
     return generate_sitemap(app)
+
+@app.route('/login', methods=['POST'])
+def login():
+    body = request.get_json()
+
+    if body is None:
+        raise APIException("You need to specify the request body as a json object", status_code=400)
+    if "email" not in body:
+        raise APIException('You need to specify the email', status_code=400)
+    if "password" not in body:
+        raise APIException('You need to specify the password', status_code=400)
+
+    user = User.query.filter_by(email=body['email']).first()
+
+    if not user:
+        raise APIException('User or password are incorrect', status_code=400)
+    if user and not bcrypt.check_password_hash(user.password, body['password']):
+        raise APIException('User or password are incorrect', status_code=400)
+
+    access_token = create_access_token(identity=body["email"])
+    return jsonify({"access_token":access_token})
+
 
 @app.route('/users', methods=['GET'])
 def get_all_users():
@@ -49,8 +77,10 @@ def create_new_user():
         raise APIException('You need to specify the password', status_code=400)
     if "is_active" not in body:
         raise APIException('You need to specify the is_active', status_code=400)
+    
+    hashed_password = bcrypt.generate_password_hash(body["password"])
 
-    new_user = User(email=body['email'], password=body['password'], is_active=body['is_active'])
+    new_user = User(email=body['email'], password=hashed_password, is_active=body['is_active'])
     
     db.session.add(new_user)
     db.session.commit()
@@ -58,8 +88,11 @@ def create_new_user():
     return jsonify({"mensaje": "Usuario creado exitosamente"}), 201
 
 @app.route('/post/<int:post_id>')
+@jwt_required()
 def get_post_by_id(post_id):
+    user_email = get_jwt_identity()
     post = Post.query.get(post_id)
+    print(get_jwt_identity())
     if post:
         post = post.serialize()
         return jsonify(post),200
