@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, Post
+from models import db, User, People, Favorite_People
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required,get_jwt_identity
 #from models import Person
@@ -61,9 +61,16 @@ def login():
 @app.route('/users', methods=['GET'])
 def get_all_users():
     users = User.query.all()
-    users = list(map(lambda user: user.serialize_with_posts(), users))
+    users = list(map(lambda user: user.serialize(), users))
 
     return jsonify(users), 200
+
+@app.route('/people', methods=['GET'])
+def get_all_people():
+    people = People.query.all()
+    people = list(map(lambda character: character.serialize(), people))
+
+    return jsonify(people), 200
 
 @app.route('/users', methods=['POST'])
 def create_new_user():
@@ -87,15 +94,15 @@ def create_new_user():
 
     return jsonify({"mensaje": "Usuario creado exitosamente"}), 201
 
-@app.route('/post/<int:post_id>')
+@app.route('/people/<int:people_id>')
 @jwt_required()
-def get_post_by_id(post_id):
+def get_people_by_id(people_id):
     user_email = get_jwt_identity()
-    post = Post.query.get(post_id)
+    people = People.query.get(people_id)
     print(get_jwt_identity())
-    if post:
-        post = post.serialize()
-        return jsonify(post),200
+    if people:
+        people_serialize = post.serialize()
+        return jsonify(people_serialize),200
     return jsonify({"mensaje": "Post no encontrado"}), 404
 
 
