@@ -72,6 +72,13 @@ def get_all_people():
 
     return jsonify(people), 200
 
+@app.route('/favorite/people', methods=['GET'])
+def get_all_people_favorite():
+    people = Favorite_People.query.all()
+    people = list(map(lambda character: character.serialize(), people))
+
+    return jsonify(people), 200
+
 @app.route('/users', methods=['POST'])
 def create_new_user():
     body = request.get_json()
@@ -93,6 +100,24 @@ def create_new_user():
     db.session.commit()
 
     return jsonify({"mensaje": "Usuario creado exitosamente"}), 201
+
+@app.route('/favorite/people', methods=['POST'])
+def create_new_favorite_people():
+    body = request.get_json()
+
+    if body is None:
+        raise APIException("You need to specify the request body as a json object", status_code=400)
+    if "user_id" not in body:
+        raise APIException('You need to specify the user_id', status_code=400)
+    if "people_id" not in body:
+        raise APIException('You need to specify the people_id', status_code=400)
+
+    new_favorite_people = Favorite_People(user_id=body['user_id'], people_id=body["people_id"])
+    
+    db.session.add(new_favorite_people)
+    db.session.commit()
+
+    return jsonify({"mensaje": "Favorito creado exitosamente"}), 201
 
 @app.route('/people/<int:people_id>')
 @jwt_required()
