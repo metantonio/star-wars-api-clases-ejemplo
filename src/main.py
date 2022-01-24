@@ -23,7 +23,7 @@ CORS(app)
 setup_admin(app)
 bcrypt = Bcrypt(app)
 # Setup the Flask-JWT-Extended extension
-app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
+app.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET_KEY')  # Check key at .env
 jwt = JWTManager(app)
 
 # Handle/serialize errors like a JSON object
@@ -119,14 +119,14 @@ def create_new_favorite_people():
 
     return jsonify({"mensaje": "Favorito creado exitosamente"}), 201
 
-@app.route('/people/<int:people_id>')
+@app.route('/people/<int:people_id>', methods=['GET'])
 @jwt_required()
 def get_people_by_id(people_id):
     user_email = get_jwt_identity()
     people = People.query.get(people_id)
     print(get_jwt_identity())
     if people:
-        people_serialize = post.serialize()
+        people_serialize = people.serialize()
         return jsonify(people_serialize),200
     return jsonify({"mensaje": "Post no encontrado"}), 404
 

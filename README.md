@@ -72,3 +72,49 @@ $ heroku create <your_application_name>
 $ git push heroku main
 ```
 :warning: For a more detailed explanation on working with .env variables or the MySQL database [read the full guide](https://github.com/4GeeksAcademy/flask-rest-hello/blob/master/docs/DEPLOY_YOUR_APP.md).
+
+
+#Endpoints
+
+## /login
+
+```
+Going to POSTMAN and make a POST method request to /login with following info at JSON, as example:
+
+{
+    "email":"kevin@4geeks.com",
+    "password":"123456"
+}
+
+If everything is correct you'll get somthing like:
+
+{
+    "access_token": "eyJ0eXA...eyJmcmVzaCI....-DJSyg2ygoQ6...-RkPdvIqdnAU..."
+}
+
+```
+
+## Access to a protected endpoint: /people/<int:people_id>
+
+```
+Let say that you want access to information of user with people_id = 1.
+You have to go to endpoint /people/1  
+but it's protected, so you have to make login first to retrieve an access_token.
+
+After that, go to POSTMAN, as this endpoint is a GET method, you don't have to fill body.
+But, you must retrive information inside the Header.
+
+Add a new key as: Authorization
+And add a new Value as: Bearer eyJ0eXA...eyJmcmVzaCI....-DJSyg2ygoQ6...-RkPdvIqdnAU...
+
+I everything is ok, you will get an answer like:
+
+{
+    "description": "Jedi",
+    "height": 2.0,
+    "id": 1,
+    "mass": 71.0,
+    "name": "Luke Skywalker"
+}
+```
+
