@@ -76,13 +76,32 @@ $ git push heroku main
 
 #Endpoints
 
+## /register
+
+```
+This is a POST method, and this endpoint register a new user, with the following info:
+
+{
+    "email":"antonio@4geeks.com",
+    "password": "123456",
+    "is_active": true
+}
+
+if everything if correct, password should be encrypted in database, and you will get this message:
+
+{
+    "mensaje": "Usuario creado exitosamente"
+}
+
+```
+
 ## /login
 
 ```
 Going to POSTMAN and make a POST method request to /login with following info at JSON, as example:
 
 {
-    "email":"kevin@4geeks.com",
+    "email":"antonio@4geeks.com",
     "password":"123456"
 }
 
@@ -120,3 +139,27 @@ I everything is ok, you will get an answer like:
 **Note: Database must have information**
 ```
 
+## /favorite/people
+```
+This endpoint has a GET and POST methods. Post works to register a new favorite character to an user. And Get method works to retrieve information of all users and their favorite characters
+
+example of GET method:
+
+[
+    {
+        "id": 1,
+        "people_name": "Luke Skywalker",
+        "user_email": "antonio@4geeks.com"
+    }
+]
+
+
+to Register, use POST Method with user_id and people_id as integers:
+
+    {
+        
+        "people_id": 1,
+        "user_id": 1
+    }
+
+```

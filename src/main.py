@@ -79,7 +79,7 @@ def get_all_people_favorite():
 
     return jsonify(people), 200
 
-@app.route('/users', methods=['POST'])
+@app.route('/register', methods=['POST'])
 def create_new_user():
     body = request.get_json()
 
@@ -128,7 +128,7 @@ def get_people_by_id(people_id):
     if people:
         people_serialize = people.serialize()
         return jsonify(people_serialize),200
-    return jsonify({"mensaje": "Post no encontrado"}), 404
+    return jsonify({"mensaje": "Character not found"}), 404
 
 
 

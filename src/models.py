@@ -43,13 +43,18 @@ class Favorite_People(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     people_id = db.Column(db.Integer, db.ForeignKey('people.id'))
+    #user_email= db.Column(db.Integer, db.ForeignKey('user.email'))
+    #people_name = db.Column(db.Integer, db.ForeignKey('people.name'))
 
     def __repr__(self):
         return '<Favorite_People %r>' % self.id
 
     def serialize(self):
+        #user_info = User.query.get(self.user_id)
+        #people_info = People.query.get(self.people_id)
+        #print(user_info, people_info)
         return {
             "id": self.id,
-            "user_id" : self.user_id,
-            "people_id": self.people_id
+            "user_email" : User.query.get(self.user_id).serialize()["email"],
+            "character_name": People.query.get(self.people_id).serialize()["name"]
         }
