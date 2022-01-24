@@ -74,7 +74,7 @@ $ git push heroku main
 :warning: For a more detailed explanation on working with .env variables or the MySQL database [read the full guide](https://github.com/4GeeksAcademy/flask-rest-hello/blob/master/docs/DEPLOY_YOUR_APP.md).
 
 
-#Endpoints
+# Endpoints
 
 ## /register
 
@@ -87,7 +87,7 @@ This is a POST method, and this endpoint register a new user, with the following
     "is_active": true
 }
 
-if everything if correct, password should be encrypted in database, and you will get this message:
+if everything is correct, password should be encrypted in database, and you will get this message:
 
 {
     "mensaje": "Usuario creado exitosamente"
@@ -105,7 +105,7 @@ Going to POSTMAN and make a POST method request to /login with following info at
     "password":"123456"
 }
 
-If everything is correct you'll get somthing like:
+If everything is correct you'll get something like this:
 
 {
     "access_token": "eyJ0eXA...eyJmcmVzaCI....-DJSyg2ygoQ6...-RkPdvIqdnAU..."
@@ -121,12 +121,12 @@ You have to go to endpoint /people/1
 but it's protected, so you have to make login first to retrieve an access_token.
 
 After that, go to POSTMAN, as this endpoint is a GET method, you don't have to fill body.
-But, you must retrive information inside the Header.
+But, you must retrive information inside the Header, with Authorization and acces_token.
 
 Add a new KEY as: Authorization
 And add a new VALUE as: Bearer eyJ0eXA...eyJmcmVzaCI....-DJSyg2ygoQ6...-RkPdvIqdnAU...
 
-I everything is ok, you will get an answer like:
+If everything is ok, you will get an answer like:
 
 {
     "description": "Jedi",
@@ -143,7 +143,7 @@ I everything is ok, you will get an answer like:
 ```
 This endpoint has a GET and POST methods. Post works to register a new favorite character to an user. And Get method works to retrieve information of all users and their favorite characters
 
-example of GET method:
+example of GET method (check serialize() method to see how this work):
 
 [
     {
