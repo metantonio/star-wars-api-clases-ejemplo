@@ -97,7 +97,7 @@ If everything is correct you'll get somthing like:
 ## Access to a protected endpoint: /people/<int:people_id>
 
 ```
-Let say that you want access to information of user with people_id = 1.
+Let say that you want access to information of character with people_id = 1.
 You have to go to endpoint /people/1  
 but it's protected, so you have to make login first to retrieve an access_token.
 
