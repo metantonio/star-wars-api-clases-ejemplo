@@ -104,8 +104,8 @@ but it's protected, so you have to make login first to retrieve an access_token.
 After that, go to POSTMAN, as this endpoint is a GET method, you don't have to fill body.
 But, you must retrive information inside the Header.
 
-Add a new key as: Authorization
-And add a new Value as: Bearer eyJ0eXA...eyJmcmVzaCI....-DJSyg2ygoQ6...-RkPdvIqdnAU...
+Add a new KEY as: Authorization
+And add a new VALUE as: Bearer eyJ0eXA...eyJmcmVzaCI....-DJSyg2ygoQ6...-RkPdvIqdnAU...
 
 I everything is ok, you will get an answer like:
 
@@ -116,5 +116,7 @@ I everything is ok, you will get an answer like:
     "mass": 71.0,
     "name": "Luke Skywalker"
 }
+
+**Note: Database must have information**
 ```
 
